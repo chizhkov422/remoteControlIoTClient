@@ -7,7 +7,7 @@ class CheckboxCont extends Component {
     checkboxState: false,
   }
   componentDidMount() {
-    axios.get('https://raspberry-web-app-server.herokuapp.com/api/states/getState/checkbox')
+    axios.get('https://remote-control-iot-server.herokuapp.com/api/states/getState/checkbox')
       .then(response => {
         this.setState({ checkboxState: Boolean(response.data.data.stateValue) });
       });
@@ -18,7 +18,7 @@ class CheckboxCont extends Component {
       stateValue: e.target.checked ? 1 : 0
     });
 
-    axios.post('https://raspberry-web-app-server.herokuapp.com/api/states/update', {
+    axios.post('https://remote-control-iot-server.herokuapp.com/api/states/update', {
       state: data
     });
 
