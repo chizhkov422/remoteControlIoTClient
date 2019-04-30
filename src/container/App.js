@@ -11,7 +11,7 @@ class App extends Component {
     maxTemp: 0,
   }
   componentDidMount() {
-    axios.get('https://remote-control-iot-server.herokuapp.com/api/states/getState/temperature')
+    axios.get('https://remote-control-iot-server.herokuapp.com/api/states/getState/temperature', { crossDomain: true })
       .then(response => {
         this.setState({ currentMode: response.data.data.currentMode });
         this.setState({ manualTemp: response.data.data.manualTemp });
@@ -51,7 +51,7 @@ class App extends Component {
     if (data) {
       axios.post('https://remote-control-iot-server.herokuapp.com/api/states/update', {
         state: data
-      });
+      }, { crossDomain: true });
     }
   }
   render() {
