@@ -5,7 +5,7 @@ import CustomCheckbox from '../CustomCheckbox';
 
 class ManualModeBlock extends Component {
   state = {
-    manualTemp: 0,
+    manualTemp: 10,
   }
   componentDidMount() {
     this.setState({ manualTemp: this.props.manualTemp });

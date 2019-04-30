@@ -5,12 +5,18 @@ import CustomCheckbox from '../CustomCheckbox';
 
 class AutoModeBlock extends Component {
   state = {
-    minTemp: 0,
-    maxTemp: 0,
+    minTemp: this.props.minTemp,
+    maxTemp: this.props.maxTemp,
   }
-  componentDidMount() {
-    this.setState({ minTemp: this.props.minTemp });
-    this.setState({ maxTemp: this.props.maxTemp });
+  componentWillReceiveProps(nextProps) {
+    if (this.props !== nextProps) {
+      this.setState({
+        minTemp: nextProps.minTemp
+      });
+      this.setState({
+        maxTemp: nextProps.maxTemp
+      });
+    }
   }
   clickHandlerForSaveButton = () => {
     const inputValues = {
@@ -63,12 +69,16 @@ AutoModeBlock.propTypes = {
   changeMode: PropTypes.func,
   currentMode: PropTypes.string,
   saveMode: PropTypes.func,
+  minTemp: PropTypes.number,
+  maxTemp: PropTypes.number,
 };
 
 AutoModeBlock.defaultProps = {
   changeMode: null,
   currentMode: '',
   saveMode: null,
+  minTemp: 10,
+  maxTemp: 10,
 };
 
 export default AutoModeBlock;
