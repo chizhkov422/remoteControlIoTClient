@@ -1,0 +1,31 @@
+.MainBlock {
+    font-size: 20px;
+  }
+  
+  .HideBlock {
+    display: none;
+  }
+  
+  .LabelInput {
+    width: 150px;
+  }
+  
+  .SaveButton {
+    display: block;
+    background-color: #06bd06;
+    width: 100px;
+    height: 30px;
+    font-size: 16px;
+    border-radius: 5px;
+    margin-top: 20px;
+  }
+  
+  label {
+    display: block;
+  
+    input{
+      width: 250px;
+      border-radius: 5px;
+      height: 20px;
+    }
+  }
