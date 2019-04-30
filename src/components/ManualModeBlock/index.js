@@ -5,20 +5,20 @@ import CustomCheckbox from '../CustomCheckbox';
 
 class ManualModeBlock extends Component {
   state = {
-    temperature: 0,
+    manualTemp: 0,
   }
   componentDidMount() {
-    this.setState({ temperature: this.props.temperature });
+    this.setState({ manualTemp: this.props.manualTemp });
   }
   clickHandlerForSaveButton = () => {
     const inputValues = {
-      temperature: this.state.temperature,
+      manualTemp: this.state.manualTemp,
     }
 
     this.props.saveMode('manual', inputValues);
   }
   changeHandlerForInput = (e) => {
-    this.setState({ temperature: e.target.value });
+    this.setState({ manualTemp: e.target.value });
   }
   render() {
     const { changeMode, currentMode } = this.props;
@@ -38,7 +38,7 @@ class ManualModeBlock extends Component {
             <input
               type='number'
               onChange={this.changeHandlerForInput}
-              value={this.state.temperature}
+              value={this.state.manualTemp}
             />
           </label>
           <button
@@ -56,11 +56,13 @@ class ManualModeBlock extends Component {
 ManualModeBlock.propTypes = {
   changeMode: PropTypes.func,
   currentMode: PropTypes.string,
+  manualTemp: PropTypes.number,
 };
 
 ManualModeBlock.defaultProps = {
   changeMode: null,
   currentMode: '',
+  manualTemp: 0,
 };
 
 export default ManualModeBlock;

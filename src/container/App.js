@@ -6,19 +6,19 @@ import ManualModeBlock from '../components/ManualModeBlock';
 class App extends Component {
   state = {
     currentMode: 'auto',
-    temperature: 0,
+    manualTemp: 0,
     minTemp: 0,
     maxTemp: 0,
   }
-  componentDidMount() {
-    axios.get('https://remote-control-iot-server.herokuapp.com/api/states/getState/temperature')
-      .then(response => {
-        this.setState({ currentMode: response.data.data.currentMode });
-        this.setState({ temperature: response.data.data.temperature });
-        this.setState({ minTemp: response.data.data.minTemp });
-        this.setState({ maxTemp: response.data.data.maxTemp });
-      });
-  }
+  // componentDidMount() {
+  //   axios.get('https://remote-control-iot-server.herokuapp.com/api/states/getState/temperature')
+  //     .then(response => {
+  //       this.setState({ currentMode: response.data.data.currentMode });
+  //       this.setState({ manualTemp: response.data.data.manualTemp });
+  //       this.setState({ minTemp: response.data.data.minTemp });
+  //       this.setState({ maxTemp: response.data.data.maxTemp });
+  //     });
+  // }
   changeMode = (mode) => {
     this.setState({ currentMode: mode });
   }
@@ -28,6 +28,7 @@ class App extends Component {
     switch (mode) {
       case 'auto': {
         data = JSON.stringify({
+          stateName: 'temperature',
           mode: mode,
           minTemp: parseInt(inputValue.minTemp, 10),
           maxTemp: parseInt(inputValue.maxTemp, 10),
@@ -36,8 +37,9 @@ class App extends Component {
       }
       case 'manual': {
         data = JSON.stringify({
+          stateName: 'temperature',
           mode: mode,
-          temperature: parseInt(inputValue.temperature, 10)
+          manualTemp: parseInt(inputValue.manualTemp, 10)
         });
         break;
       }
@@ -66,7 +68,7 @@ class App extends Component {
           changeMode={this.changeMode}
           currentMode={this.state.currentMode}
           saveMode={this.saveMode}
-          temperature={this.state.temperature}
+          manualTemp={this.state.manualTemp}
         />
       </>
     );
