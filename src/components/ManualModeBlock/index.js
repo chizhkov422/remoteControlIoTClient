@@ -7,6 +7,13 @@ class ManualModeBlock extends Component {
   state = {
     manualTemp: 10,
   }
+  componentWillReceiveProps(nextProps) {
+    if (this.props !== nextProps) {
+      this.setState({
+        manualTemp: nextProps.manualTemp
+      });
+    }
+  }
   componentDidMount() {
     this.setState({ manualTemp: this.props.manualTemp });
   }
