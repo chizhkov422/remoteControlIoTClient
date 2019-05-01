@@ -49,15 +49,9 @@ class App extends Component {
     }
 
     if (data) {
-      let axiosConfig = {
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-          "Access-Control-Allow-Origin": "*",
-        }
-      };
       axios.post('https://remote-control-iot-server.herokuapp.com/api/states/update', {
         state: data
-      }, axiosConfig);
+      });
     }
   }
   render() {
