@@ -12,6 +12,7 @@ class App extends Component {
     manualTemp: 0,
     minTemp: 0,
     maxTemp: 0,
+    currentTemperature: 0,
   }
   componentDidMount() {
 
@@ -19,13 +20,17 @@ class App extends Component {
       console.log('Connected to socket chanel!');
     });
 
-    socket.on('temperatureState', (state) => {
+    socket.on('temperatureStateClient', (state) => {
       if (state.initialState) {
         this.setState({ currentMode: state.data.mode ? state.data.mode : '' });
         this.setState({ manualTemp: state.data.manualTemp ? state.data.manualTemp : 0 });
         this.setState({ minTemp: state.data.minTemp ? state.data.minTemp : 0 });
         this.setState({ maxTemp: state.data.maxTemp ? state.data.maxTemp : 0 });
       }
+    });
+
+    socket.on('currentTemperatureForClient', (currentTemperature) => {
+      this.setState({ currentTemperature: currentTemperature ? currentTemperature : 0 });
     });
   }
   changeMode = (mode) => {
@@ -36,22 +41,22 @@ class App extends Component {
 
     switch (mode) {
       case 'auto': {
-        data = JSON.stringify({
+        data = {
           stateName: 'temperature',
           mode: mode,
           minTemp: parseInt(inputValue.minTemp, 10),
           maxTemp: parseInt(inputValue.maxTemp, 10),
           webClient: true,
-        });
+        };
         break;
       }
       case 'manual': {
-        data = JSON.stringify({
+        data = {
           stateName: 'temperature',
           mode: mode,
           manualTemp: parseInt(inputValue.manualTemp, 10),
           webClient: true,
-        });
+        };
         break;
       }
       default: {
@@ -60,7 +65,7 @@ class App extends Component {
     }
 
     if (data) {
-      socket.emit('temperatureState', data);
+      socket.emit('updateTemperatureState', data);
       alert('State saved!');
     }
   }
