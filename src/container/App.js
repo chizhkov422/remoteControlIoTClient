@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import AutoModeBlock from '../components/AutoModeBlock';
 import ManualModeBlock from '../components/ManualModeBlock';
+import io from 'socket.io-client';
+
+const connectUrl = 'https://remote-control-iot-server.herokuapp.com/';
+const socket = io.connect(connectUrl, { reconnect: true });
 
 class App extends Component {
   state = {
@@ -11,13 +14,19 @@ class App extends Component {
     maxTemp: 0,
   }
   componentDidMount() {
-    axios.get('https://remote-control-iot-server.herokuapp.com/api/states/getState/temperature', { crossDomain: true })
-      .then(response => {
-        this.setState({ currentMode: response.data.data.mode });
-        this.setState({ manualTemp: response.data.data.manualTemp });
-        this.setState({ minTemp: response.data.data.minTemp });
-        this.setState({ maxTemp: response.data.data.maxTemp });
-      });
+
+    socket.on('connect', () => {
+      console.log('Connected to socket chanel!');
+    });
+
+    socket.on('temperatureState', (state) => {
+      if (state.initialState) {
+        this.setState({ currentMode: state.data.mode ? state.data.mode : '' });
+        this.setState({ manualTemp: state.data.manualTemp ? state.data.manualTemp : 0 });
+        this.setState({ minTemp: state.data.minTemp ? state.data.minTemp : 0 });
+        this.setState({ maxTemp: state.data.maxTemp ? state.data.maxTemp : 0 });
+      }
+    });
   }
   changeMode = (mode) => {
     this.setState({ currentMode: mode });
@@ -32,6 +41,7 @@ class App extends Component {
           mode: mode,
           minTemp: parseInt(inputValue.minTemp, 10),
           maxTemp: parseInt(inputValue.maxTemp, 10),
+          webClient: true,
         });
         break;
       }
@@ -39,7 +49,8 @@ class App extends Component {
         data = JSON.stringify({
           stateName: 'temperature',
           mode: mode,
-          manualTemp: parseInt(inputValue.manualTemp, 10)
+          manualTemp: parseInt(inputValue.manualTemp, 10),
+          webClient: true,
         });
         break;
       }
@@ -49,9 +60,8 @@ class App extends Component {
     }
 
     if (data) {
-      axios.post('https://remote-control-iot-server.herokuapp.com/api/states/update', {
-        state: data
-      });
+      socket.emit('temperatureState', data);
+      alert('State saved!');
     }
   }
   render() {
