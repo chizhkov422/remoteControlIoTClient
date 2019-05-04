@@ -7,6 +7,7 @@ class AutoModeBlock extends Component {
   state = {
     minTemp: this.props.minTemp,
     maxTemp: this.props.maxTemp,
+    changedFields: false,
   }
   componentWillReceiveProps(nextProps) {
     if (this.props !== nextProps) {
@@ -25,12 +26,26 @@ class AutoModeBlock extends Component {
     }
 
     this.props.saveMode('auto', inputValues);
+
+    this.setState({ changedFields: false });
   }
-  changeHandlerForMinTemp = (e) => {
-    this.setState({ minTemp: e.target.value });
+  changeHandlerForMinTemp = async (e) => {
+    await this.setState({ minTemp: parseInt(e.target.value, 10) });
+
+    if (this.state.minTemp !== this.props.minTemp) {
+      this.setState({ changedFields: true });
+    } else {
+      this.setState({ changedFields: false });
+    }
   }
-  changeHandlerForMaxTemp = (e) => {
-    this.setState({ maxTemp: e.target.value });
+  changeHandlerForMaxTemp = async (e) => {
+    await this.setState({ maxTemp: parseInt(e.target.value, 10) });
+
+    if (this.state.maxTemp !== this.props.maxTemp) {
+      this.setState({ changedFields: true });
+    } else {
+      this.setState({ changedFields: false });
+    }
   }
   render() {
     const { changeMode, currentMode } = this.props;
@@ -54,7 +69,7 @@ class AutoModeBlock extends Component {
             <input type='number' value={this.state.maxTemp} onChange={this.changeHandlerForMaxTemp} />
           </label>
           <button
-            className="SaveButton"
+            className={this.state.changedFields ? 'SaveButton' : 'SaveButton_Hide'}
             onClick={this.clickHandlerForSaveButton}
           >
             Save

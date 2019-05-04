@@ -18,6 +18,10 @@
     font-size: 16px;
     border-radius: 5px;
     margin-top: 20px;
+
+    &_Hide {
+      display: none;
+    }
   }
   
   label {

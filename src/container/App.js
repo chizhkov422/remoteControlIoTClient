@@ -48,6 +48,11 @@ class App extends Component {
           maxTemp: parseInt(inputValue.maxTemp, 10),
           webClient: true,
         };
+        this.setState({
+          mode: mode,
+          minTemp: parseInt(inputValue.minTemp, 10),
+          maxTemp: parseInt(inputValue.maxTemp, 10),
+        });
         break;
       }
       case 'manual': {
@@ -57,6 +62,10 @@ class App extends Component {
           manualTemp: parseInt(inputValue.manualTemp, 10),
           webClient: true,
         };
+        this.setState({
+          mode: mode,
+          manualTemp: parseInt(inputValue.manualTemp, 10),
+        });
         break;
       }
       default: {

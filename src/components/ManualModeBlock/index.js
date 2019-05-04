@@ -5,7 +5,8 @@ import CustomCheckbox from '../CustomCheckbox';
 
 class ManualModeBlock extends Component {
   state = {
-    manualTemp: 10,
+    manualTemp: this.props.manualTemp,
+    changedFields: false
   }
   componentWillReceiveProps(nextProps) {
     if (this.props !== nextProps) {
@@ -14,18 +15,23 @@ class ManualModeBlock extends Component {
       });
     }
   }
-  componentDidMount() {
-    this.setState({ manualTemp: this.props.manualTemp });
-  }
   clickHandlerForSaveButton = () => {
     const inputValues = {
       manualTemp: this.state.manualTemp,
     }
 
     this.props.saveMode('manual', inputValues);
+
+    this.setState({ changedFields: false });
   }
-  changeHandlerForInput = (e) => {
-    this.setState({ manualTemp: e.target.value });
+  changeHandlerForInput = async (e) => {
+    await this.setState({ manualTemp: parseInt(e.target.value, 10) });
+
+    if (this.state.manualTemp !== this.props.manualTemp) {
+      this.setState({ changedFields: true });
+    } else {
+      this.setState({ changedFields: false });
+    }
   }
   render() {
     const { changeMode, currentMode } = this.props;
@@ -49,7 +55,7 @@ class ManualModeBlock extends Component {
             />
           </label>
           <button
-            className="SaveButton"
+            className={this.state.changedFields ? 'SaveButton' : 'SaveButton_Hide'}
             onClick={this.clickHandlerForSaveButton}
           >
             Save
